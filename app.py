@@ -5,8 +5,8 @@ import os
 from io import BytesIO
 
 # set up our app
-st.set_page_config(page_title="💀Data Sweeper", layout='wide')
-st.title("💀Data Sweeper")
+st.set_page_config(page_title="📂Data Sweeper", layout='wide')
+st.title("🔍📂Data Sweeper")
 st.write("Transform your files between CSV and Excel format with built-in data cleaning and visualization!")
 
 uploaded_files = st.file_uploader("Upload your files (CSV or Excel):", type=["csv", "xlsx"], accept_multiple_files=True)
@@ -51,10 +51,21 @@ if uploaded_files:
         columns = st.multiselect(f"Choose Columns for {file.name}", df.columns, default=df.columns)
         df = df[columns]
 
-        # create some visualizations
+        # # create some visualizations
+        # st.subheader(f"📊 Data Visualization")
+        # if st.checkbox(f"Show Visualization for {file.name}"):
+        #     st.bar_chart(df.select_dtypes(include='number').iloc[:, :2])
+        # Data Visualization
         st.subheader(f"📊 Data Visualization")
-        if st.checkbox(f"Show Visualization for {file.name}"):
-            st.bar_chart(df.select_dtypes(include='number').iloc[:, :2])
+        chart_type = st.selectbox(f"Choose a Chart Type for {file.name}", ["Bar Chart", "Line Chart", "Area Chart"])
+
+        if st.button(f"Show {chart_type} for {file.name}"):
+            if chart_type == "Bar Chart":
+                st.bar_chart(df.select_dtypes(include='number'))
+            elif chart_type == "Line Chart":
+                st.line_chart(df.select_dtypes(include='number'))
+            elif chart_type == "Area Chart":
+                st.area_chart(df.select_dtypes(include='number'))
 
         # convert the file --> CSV to Excel
         st.subheader("🔄 Conversion Options")
@@ -83,5 +94,5 @@ if uploaded_files:
                 file_name=file_name,
                 mime=mime_type
             )
-
 st.success("🎉 All files processed!")
+
