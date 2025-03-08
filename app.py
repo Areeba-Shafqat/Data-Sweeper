@@ -52,16 +52,15 @@ if uploaded_files:
         df = df[columns]
 
         # create some visualizations
-        st.subheader(f"📊 Data Visualization")
+        st.subheader(f"📊 Data Visualization")        
         chart_type = st.selectbox(f"Choose a Chart Type for {file.name}", ["Bar Chart", "Line Chart", "Area Chart"])
+        if chart_type == "Bar Chart":
+            st.bar_chart(df.select_dtypes(include='number').iloc[:, :2])
+        elif chart_type == "Line Chart":
+            st.line_chart(df.select_dtypes(include='number').iloc[:, :2])
+        elif chart_type == "Area Chart":
+            st.area_chart(df.select_dtypes(include='number').iloc[:, :2])
 
-        if st.button(f"Show {chart_type} for {file.name}"):
-            if chart_type == "Bar Chart":
-                st.bar_chart(df.select_dtypes(include='number'))
-            elif chart_type == "Line Chart":
-                st.line_chart(df.select_dtypes(include='number'))
-            elif chart_type == "Area Chart":
-                st.area_chart(df.select_dtypes(include='number'))
 
         # convert the file --> CSV to Excel
         st.subheader("🔄 Conversion Options")
